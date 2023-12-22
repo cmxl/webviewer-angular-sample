@@ -24,7 +24,7 @@ export class AppComponent implements AfterViewInit {
 
     WebViewer({
       path: '../lib',
-      initialDoc: '../files/webviewer-demo-annotated.pdf',
+      initialDoc: '../files/test.pdf',
       licenseKey: 'your_license_key'  // sign up to get a free trial key at https://dev.apryse.com
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
@@ -33,6 +33,7 @@ export class AppComponent implements AfterViewInit {
 
       const { documentViewer, Annotations, annotationManager } = instance.Core;
 
+      
       instance.UI.openElements(['notesPanel']);
 
       documentViewer.addEventListener('annotationsLoaded', () => {
@@ -52,6 +53,13 @@ export class AppComponent implements AfterViewInit {
         });
         annotationManager.addAnnotation(rectangleAnnot);
         annotationManager.redrawAnnotation(rectangleAnnot);
+        
+        // setting print quality to maximum, this does not have any effect on the number of pages being printed
+        instance.UI.setPrintQuality(3);
+        
+        // no matter which options are set, the printInBackground method always prints an extra empty page
+        // this is not the case when printing from the UI
+        instance.UI.printInBackground();
       });
     })
   }
